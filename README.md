@@ -1,9 +1,9 @@
 
-data - מהסרבר
-my_id - הid שלנו
-game - כל מה שצריך מהמשחק
-cur_turn - התור כרגע
+data - the data from the server 
+my_id - our id
+game - the game itself(and all his paremters)
+cur_turn - the current turn
 pile - the leading card
-card - הקלף שאנחנו מקבלים מהפעולה שלנו
-play_turn - הקלף שאנחנו שולחים לסרבר
+card - our card to put into the game
+play_turn - our card sending to the front side
 
