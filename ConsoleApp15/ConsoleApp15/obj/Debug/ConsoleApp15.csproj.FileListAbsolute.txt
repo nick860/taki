@@ -5,3 +5,10 @@ C:\Users\MAXIM\source\repos\ConsoleApp15\ConsoleApp15\obj\Debug\ConsoleApp15.csp
 C:\Users\MAXIM\source\repos\ConsoleApp15\ConsoleApp15\obj\Debug\ConsoleApp15.csproj.CoreCompileInputs.cache
 C:\Users\MAXIM\source\repos\ConsoleApp15\ConsoleApp15\obj\Debug\ConsoleApp15.exe
 C:\Users\MAXIM\source\repos\ConsoleApp15\ConsoleApp15\obj\Debug\ConsoleApp15.pdb
+C:\Users\MAXIM\Desktop\taki\ConsoleApp15\ConsoleApp15\bin\Debug\ConsoleApp15.exe.config
+C:\Users\MAXIM\Desktop\taki\ConsoleApp15\ConsoleApp15\bin\Debug\ConsoleApp15.exe
+C:\Users\MAXIM\Desktop\taki\ConsoleApp15\ConsoleApp15\bin\Debug\ConsoleApp15.pdb
+C:\Users\MAXIM\Desktop\taki\ConsoleApp15\ConsoleApp15\obj\Debug\ConsoleApp15.csprojAssemblyReference.cache
+C:\Users\MAXIM\Desktop\taki\ConsoleApp15\ConsoleApp15\obj\Debug\ConsoleApp15.csproj.CoreCompileInputs.cache
+C:\Users\MAXIM\Desktop\taki\ConsoleApp15\ConsoleApp15\obj\Debug\ConsoleApp15.exe
+C:\Users\MAXIM\Desktop\taki\ConsoleApp15\ConsoleApp15\obj\Debug\ConsoleApp15.pdb
