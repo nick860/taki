@@ -1,4 +1,4 @@
-#    Imports
+#   Imports
 import socket
 import sys
 import time
@@ -81,14 +81,14 @@ def littleCards(game,idm):
         return False
         
     
-"""  ΧΧ©ΧªΧ Χ™Χ:
-data - ΧΧ”Χ΅Χ¨Χ‘Χ¨
-my_id - Χ”id Χ©ΧΧ Χ•
-game - Χ›Χ ΧΧ” Χ©Χ¦Χ¨Χ™Χ ΧΧ”ΧΧ©Χ—Χ§
-cur_turn - Χ”ΧªΧ•Χ¨ Χ›Χ¨Χ’ΧΆ
+"""  ξωϊπιν:
+data - ξδρψαψ
+my_id - δid ωμπε
+game - λμ ξδ ωφψικ ξδξωηχ
+cur_turn - δϊεψ λψβς
 pile - the leading card
-card - Χ”Χ§ΧΧ£ Χ©ΧΧ Χ—Χ Χ• ΧΧ§Χ‘ΧΧ™Χ ΧΧ”Χ¤ΧΆΧ•ΧΧ” Χ©ΧΧ Χ•
-play_turn - Χ”Χ§ΧΧ£ Χ©ΧΧ Χ—Χ Χ• Χ©Χ•ΧΧ—Χ™Χ ΧΧ΅Χ¨Χ‘Χ¨
+card - δχμσ ωΰπηπε ξχαμιν ξδτςεμδ ωμπε
+play_turn - δχμσ ωΰπηπε ωεμηιν μρψαψ
 """
 # -------------------------------------------------------------------------
 #   Sockets and Data
@@ -204,4 +204,3 @@ try:
 finally:
     print 'closing socket'
     sock.close()
-
