@@ -15,7 +15,6 @@ namespace WindowsFormsApp1
     {
         private Panel[,] cards = new Panel[2, 8];
         private Label[,] sign = new Label[2, 8];
-        private Label[,] color = new Label[2, 8];
         private Label headline = new Label();
         private Label current = new Label();
         public Form1()
@@ -54,25 +53,37 @@ namespace WindowsFormsApp1
                     sign[i, j] = new Label
                     {
                         Name = "sign " + i + "" + j,
-                        Text = "69",
-                        Location = new Point(25, 50)
+                        Location = new Point(30, 40),
+                        Font = new Font("comic sans", 14)
                     };
                     cards[i, j].Controls.Add(sign[i, j]);
-
-                    color[i, j] = new Label
-                    {
-                        Name = "color " + i + "" + j,
-                        Text = "color: RED",
-                        Location = new Point(5, 20)
-
-                    };
-                    cards[i, j].Controls.Add(color[i, j]);
 
                 }
             InitializeComponent();
         }
 
-        private void fileSystemWatcher1_Changed(object sender, FileSystemEventArgs e)
+        private void SetCardColor(Panel card, string color)
+        {
+            switch(color)
+            {
+                case "B":
+                    card.BackColor = Color.DodgerBlue;
+                    break;
+                case "G":
+                    card.BackColor = Color.LightGreen;
+                    break;
+                case "Y":
+                    card.BackColor = Color.Gold;
+                    break;
+                case "R":
+                    card.BackColor = Color.IndianRed;
+                    break;
+
+            }
+
+        }
+
+        private void fileSystemWatcher1_Changed_1(object sender, FileSystemEventArgs e)
         {
             string[] lines = File.ReadAllLines(@"C:\takifolder\cardfile.txt");
             for (int i = 0; i < lines.Length; i++)                              // cards on hand
@@ -83,17 +94,18 @@ namespace WindowsFormsApp1
                     if (i == lines.Length - 1)
                     {
                         sign[1, 7].Text = components[0];
-                        color[1, 7].Text = "color: " + components[1];
+                        SetCardColor(cards[1, 7], components[1]);
+
                     }
                     else if (i < 7)
                     {
                         sign[0, i].Text = components[0];
-                        color[0, i].Text = "color: " + components[1];
+                        SetCardColor(cards[0, i], components[1]);
                     }
                     else
                     {
                         sign[1, i - 7].Text = components[0];
-                        color[1, i - 7].Text = "color: " + components[1];
+                        SetCardColor(cards[1, i-7], components[1]);
                     }
                 }
                 else
