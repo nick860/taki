@@ -20,7 +20,7 @@ def colorNumCheck(game,card):
             deck.append(c)
 
     for c2 in deck:
-        if WeHave(c2["color"])>maxx:
+        if WeHave(game,c2["color"])>maxx:
             maxx=WeHave(game,c2["color"])
             color=c2["color"]
             cardR=c2
@@ -42,12 +42,12 @@ def WeHave(game,card):
     count=0
     for c in hand:
         if flag=='ALL':  
-            if c['color ']==pile['color ']:
+            if c['color']==pile['color']:
                 count=count+1
         else:
-            if c['color ']==card['color '] and card['value']=="TAKI":
+            if c['color']==card['color'] and card['value']=="TAKI":
                 count=count+1
-            elif c['color ']==card['color '] and card['value']=="+":
+            elif c['color ']==card['color'] and card['value']=="+":
                 count=count+1
     return count           
         
@@ -89,7 +89,7 @@ def littleCards(game,idm):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect the socket to the port where the server is listening
-server_address = ('localhost', 50000)
+server_address = ('192.168.1.20', 50045)
 print >>sys.stderr, 'connecting to %s port %s' % server_address
 sock.connect(server_address)
 
@@ -195,7 +195,7 @@ try:
             dus = json.dumps(play_turn, **json_kwargs)
             sock.send(dus)
             
-        
+        time.sleep(1)
 
 
                 
