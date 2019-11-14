@@ -78,7 +78,7 @@ def littleCards(game,idm):
 
     handNext=game['others']
     cardsOfNext=handNext[nextPlayer]+1
-    if cardsOfNext<4:
+    if cardsOfNext<20:
         return True
     else:
         return False
