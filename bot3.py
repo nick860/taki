@@ -181,7 +181,7 @@ try:
                        if pile['value']=="TAKI" and card:
                            if col==1:
                                play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': 'close taki'}
-                           elif:
+                           else:
                                opentaki=True
                                
                        elif col>colOfNum[1] and card:
