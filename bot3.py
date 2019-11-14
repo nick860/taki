@@ -179,7 +179,7 @@ try:
                              color=key
                     
                         play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': color}     
-                else: #if this a regular card game turn
+                elif takeFrom==True: #if this a regular card game turn
                        col=colorCheck(game,pile['color'])
                        print "cheking for regalir card"
                        colOfNum=colorNumCheck(game,pile)
@@ -192,7 +192,7 @@ try:
                                
                        elif col>colOfNum[1] and card:
                            play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
-                       elif col<=colOfNum[1] and card:
+                       elif col<=colOfNum[1]:
                            card=colOfNum[0]
                            play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                        else:
