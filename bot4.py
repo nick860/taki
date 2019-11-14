@@ -82,6 +82,18 @@ def littleCards(game,idm):
     else:
         return False
         
+def BeforeUs(i):
+    if i>0:
+        return i-1
+    else:
+        return 3
+
+
+def TwoBeforeUs(i):
+    if i+2<4:
+        return i+2
+    else:
+        return i-2
 
 # -------------------------------------------------------------------------
 #   Sockets and Data
@@ -98,7 +110,12 @@ json_kwargs = {'default': lambda o: o.__dict__, 'sort_keys': True, 'indent': 4}
 start=True
 password = '1234'
 opentaki=False
-saveCard=None
+saveCard=True
+Maybe=0
+check=0
+saveOneBefore=0
+OneBefore=0
+
 try:
     # Send data
     # Connection setup
@@ -124,18 +141,32 @@ try:
                 break
             cur_turn = game['turn']
             
+            
+            print cur_turn
+            print game['others']
+            
+            if cur_turn ==game['others'][TwoBeforeUs(my_id)]:
+                saveOneBefore= game['others'][BeforeUs(my_id)]
+
+                
             if cur_turn == my_id: # my turn
                 pile = game['pile']
-                print ";;;;6;;d;;;;;s;;;1"
+                OneBefore=game['others'][BeforeUs(my_id)]
                 
-                if (pile['value'] in ["+2","CHDIR","STOP"]) and saveCard!=pile and start==False:
-                    saveCard=pile
-                elif (pile['value'] in ["+2","CHDIR","STOP"]):
-                    saveCard=None
+             
+                if OneBefore-saveOneBefore==0 and pile['value'] == "STOP":
+                    print "Stop not our"
+                    saveCard=True
                     
-                start=False
+                elif OneBefore-saveOneBefore >=1 and pile['value'] == "+2":
+                    saveCard=False
+                    
+                else:
+                    saveCard=True
+                
                 print saveCard
-                if pile['value'] == "+2": # if someone put +2
+                
+                if pile['value'] == "+2" and saveCard==True : # if someone put +2
                     print ";;;;;;;;;;;;;;1"
                     card=Exist(game,["+2"],[])
                     if card: # put the card : +2
@@ -143,6 +174,7 @@ try:
                         takeFrom=False
                     else:
                         takeFrom=True
+                
                 #else: # take card from the server
                    # play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card' }
 
@@ -152,7 +184,7 @@ try:
                         print ";;;;;;d;;;;;;;;1"
                         card=Exist(game,["+2","STOP","CHDIR"],[pile['color']])
                         play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
-                        saveCard=card
+                        
                         takeFrom=False
            #================In this else we dont care about the amount of card
                      #of the next player and we dont need to take +2 card
@@ -187,7 +219,7 @@ try:
                         dicColor={"Yellow":yellow,"red":red,"blue":blue,"green":green}
                         num= max(dicColor.values())
                         color=""
-                        for key, value in dictionary.items():
+                        for key, value in dicColor.items():
                             if num == value:
                              color=key
                     
@@ -222,7 +254,7 @@ try:
 
 
                 
-               
+                start=False
                 print play_turn
                 try:
                     print card["color"]
@@ -231,14 +263,15 @@ try:
                     pass
                 
                 
-                if takeFrom==True:
+                if takeFrom==True or play_turn==pile:
                         play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card'}
                         
                 if opentaki==True:
                     if colorCheck(game,pile['color'])==1:
                         play_turn['order']='close taki'
                         opentaki=False
-                
+                if play_turn["card"]["value"]=="TAKI":
+                    print "suvh"
                 dus = json.dumps(play_turn, **json_kwargs)
                 sock.send(dus)
             
