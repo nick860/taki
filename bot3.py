@@ -119,13 +119,13 @@ try:
         print >> sys.stderr, 'For game state "%s"' % data
         if "error" not in data:   #need to check - Error[ ??
             game = json.loads(data)
-            if 'error' in game:
-                
+            if 'error' in game: 
                 break
             cur_turn = game['turn']
             
             if cur_turn == my_id: # my turn
                 pile = game['pile']
+               
                 if pile['value'] == "+2": # if someone put +2
                     card=Exist(game,["+2"],[])
                     if card: # put the card : +2
