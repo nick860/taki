@@ -167,12 +167,12 @@ try:
                             if count>0:
                                 play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                                 takeFrom=False
-                            elif card["value"]=="+":
-                                if count>0:
-                                    play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
-                                    takeFrom=False
-                                else:
-                                    takeFrom=True
+                    elif card["value"]=="+":
+                            if count>0:
+                                play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
+                                takeFrom=False
+                    else:
+                        takeFrom=True
                 #if we dont have a strong card or the card not usefull in our case
                 #so we may check the change color card
               
