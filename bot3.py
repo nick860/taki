@@ -182,13 +182,14 @@ try:
                        if col>colOfNum[1] and card:
                            play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                        elif col<=colOfNum[1] and card:
-                           play_turn = {'card': colOfNum[0], 'order': ''}
+                           card=colOfNum[0]
+                           play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                        else:
                            takeFrom=True
 
                 try:
                     print card["color"]
-                    
+                    print takeFrom
                 except:
                     pass
                 if takeFrom==True:
