@@ -99,6 +99,7 @@ json_kwargs = {'default': lambda o: o.__dict__, 'sort_keys': True, 'indent': 4}
 
 password = '1234'
 opentaki=False
+saveCard=None
 try:
     # Send data
     # Connection setup
@@ -125,10 +126,15 @@ try:
             
             if cur_turn == my_id: # my turn
                 pile = game['pile']
-               
+                if (pile['value'] in ["+2","CHDIR","STOP"]) and saveCard!=pile:
+                    saveCard=pile
+                else:
+                    saveCard=None
+                
+                print saveCard
                 if pile['value'] == "+2": # if someone put +2
                     card=Exist(game,["+2"],[])
-                    if card: # put the card : +2
+                    if card and saveCard==None: # put the card : +2
                         play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                     else:
                         takeFrom=True
@@ -136,20 +142,19 @@ try:
                    # play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card' }
 
             #if to the next player has 4- cards so try to put spacifcs card
-                elif littleCards(game,my_id)==True:
-                    card=Exist(game,["+2","STOP","CHDIR"],[pile['color']])
-                    if card:
+                card=Exist(game,["+2","STOP","CHDIR"],[pile['color']])
+                if card and takeFrom==True:
                         play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
-                    else:
-                        takeFrom=True
+                        saveCard=card
+                        takeFrom=False
            #================In this else we dont care about the amount of card
                      #of the next player and we dont need to take +2 card
-                else: 
+               
                 #cheking if we have a storng card we can use and if its usefull for us
-                    card=Exist(game,["TAKI","+"],["ALL",pile['color']])
-                    if card:
-                        count=WeHave(game,card)
-                        if card["value"]=="TAKI":                    
+                card=Exist(game,["TAKI","+"],["ALL",pile['color']])
+                if card and takeFrom==True:
+                    count=WeHave(game,card)
+                    if card["value"]=="TAKI":                    
                             if count>0:
                                 play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                             elif card["value"]=="+":
@@ -159,8 +164,8 @@ try:
                                     takeFrom=True
                 #if we dont have a strong card or the card not usefull in our case
                 #so we may check the change color card
-                    card=Exist(game,["CHCOL"],[])
-                    if card and takeFrom==True:
+                card=Exist(game,["CHCOL"],[])
+                if card and takeFrom==True:
                         yellow=colorCheck(game,"Yellow")
                         red=colorCheck(game,"red")
                         blue=colorCheck(game,"blue")
@@ -174,8 +179,9 @@ try:
                              color=key
                     
                         play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': color}     
-                    else: #if this a regular card game turn
+                else: #if this a regular card game turn
                        col=colorCheck(game,pile['color'])
+                       print "cheking for regalir card"
                        colOfNum=colorNumCheck(game,pile)
                        card=Exist(game,["1","2","3","4","5","6","7","8","9"],[pile['color']])
                        if pile['value']=="TAKI" and card:
