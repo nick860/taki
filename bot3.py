@@ -90,7 +90,7 @@ def littleCards(game,idm):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect the socket to the port where the server is listening
-server_address = ('localhost', 50000)
+server_address = ('192.168.1.20', 50040)
 
 sock.connect(server_address)
 print 'connected'
@@ -111,7 +111,7 @@ try:
     my_id = int(re.findall('[0-9]', data)[0])
     print 'my id - ' ,my_id
 
-    time.sleep(1)
+    
     takeFrom=False
     #   Loop Game:
     while True:
@@ -120,6 +120,7 @@ try:
         if "error" not in data:   #need to check - Error[ ??
             game = json.loads(data)
             if 'error' in game:
+                
                 break
             cur_turn = game['turn']
             
@@ -128,7 +129,7 @@ try:
                 if pile['value'] == "+2": # if someone put +2
                     card=Exist(game,["+2"],[])
                     if card: # put the card : +2
-                        play_turn = {'card': card, 'order': ''}
+                        play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                     else:
                         takeFrom=True
                 #else: # take card from the server
@@ -138,7 +139,7 @@ try:
                 elif littleCards(game,my_id)==True:
                     card=Exist(game,["+2","STOP","CHDIR"],[pile['color']])
                     if card:
-                        play_turn = {'card': card, 'order': ''}
+                        play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                     else:
                         takeFrom=True
            #================In this else we dont care about the amount of card
@@ -150,10 +151,10 @@ try:
                         count=WeHave(game,card)
                         if card["value"]=="TAKI":                    
                             if count>0:
-                                play_turn = {'card': card, 'order': ''}
+                                play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                             elif card["value"]=="+":
                                 if count>0:
-                                    play_turn = {'card': card, 'order': ''}
+                                    play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                                 else:
                                     takeFrom=True
                 #if we dont have a strong card or the card not usefull in our case
@@ -172,27 +173,32 @@ try:
                             if num == value:
                              color==key
                     
-                        play_turn = {'card': card, 'order': color}     
+                        play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': color}     
                     else: #if this a regular card game turn
                        col=colorCheck(game,pile['color'])
                        colOfNum=colorNumCheck(game,pile)
                        card=Exist(game,["1","2","3","4","5","6","7","8","9"],[pile['color']])
 
-                       if col>colOfNum[1]:
-                           play_turn = {'card': card, 'order': ''}
-                       elif col<=colOfNum[1]:
+                       if col>colOfNum[1] and card:
+                           play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
+                       elif col<=colOfNum[1] and card:
                            play_turn = {'card': colOfNum[0], 'order': ''}
                        else:
                            takeFrom=True
 
-
-
+                try:
+                    print card["color"]
+                    
+                except:
+                    pass
                 if takeFrom==True:
-                        play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card' }
+                        play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card'}
+                        takeFrom=False
+                print "88888888888888888888",play_turn
                 dus = json.dumps(play_turn, **json_kwargs)
                 sock.send(dus)
             
-        time.sleep(1)
+        
 
 
                 

@@ -27,7 +27,7 @@ def choose_best_option(game):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect the socket to the port where the server is listening
-server_address = ('localhost', 50000)
+server_address = ('192.168.1.20', 50050)
 print >>sys.stderr, 'connecting to %s port %s' % server_address
 sock.connect(server_address)
 
@@ -69,7 +69,7 @@ try:
                     play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card' }
                 dus = json.dumps(play_turn, **json_kwargs)
                 sock.send(dus)
-        time.sleep(1)
+
 
 
 finally:
