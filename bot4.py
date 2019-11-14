@@ -95,6 +95,20 @@ def TwoBeforeUs(i):
     else:
         return i-2
 
+def colorforg(colo):
+    dif={"yellow":'_Y'
+         "red":'_R'
+         "green":"_G"
+         "blue":"_B"
+         "CHDIR":">"
+         "STOP":"S"
+         "TAKI":"T"
+         "CHCOL":"cc"
+         "TAKICOLOR":"ct"
+         "+":"+"
+         "+2":"+2"
+        }
+    return dif[colo] 
 # -------------------------------------------------------------------------
 #   Sockets and Data
 # Create a TCP/IP socket
@@ -115,7 +129,7 @@ Maybe=0
 check=0
 saveOneBefore=0
 OneBefore=0
-
+hand=None
 try:
     # Send data
     # Connection setup
@@ -140,8 +154,20 @@ try:
             if 'error' in game: 
                 break
             cur_turn = game['turn']
-            
-            
+            cs=0
+            with open("c:\takifolder\cardfile.txt") as file2:
+                for c in hand:
+                    colorr=c["color"]
+                    value=c["value"]
+                    cs=cs+1
+                    if value in ["1","2","3","4","5","6","7","8","9"]:            
+                      file2.write(str(cs)+". "+value+colorforg(colorr)+"\n")
+                    else:
+                        if value=="TAKI" and colorr="ALL":     
+                          file2.write(str(cs)+". "+colorforg("TAKICOLOR")+"\n")
+                        else:
+                          file2.write(str(cs)+". "+colorforg(value)+"\n")  
+                    
             print cur_turn
             print game['others']
             
@@ -152,8 +178,8 @@ try:
             if cur_turn == my_id: # my turn
                 pile = game['pile']
                 OneBefore=game['others'][BeforeUs(my_id)]
+                hand=game['hand']
                 
-             
                 if OneBefore-saveOneBefore==0 and pile['value'] == "STOP":
                     print "Stop not our"
                     saveCard=True
