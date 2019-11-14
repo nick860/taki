@@ -17,7 +17,7 @@ namespace WindowsFormsApp1
         [STAThread]
         static void Main()
         {
-            Process.Start(@"C:\Users\MAXIM\Desktop\taki\ConsoleApp15\ConsoleApp15\bin\Debug\ConsoleApp15.exe");
+            // Process.Start(@"C:\Users\MAXIM\Desktop\taki\ConsoleApp15\ConsoleApp15\bin\Debug\ConsoleApp15.exe");
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
