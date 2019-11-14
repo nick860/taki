@@ -171,7 +171,7 @@ try:
                         color=""
                         for key, value in dictionary.items():
                             if num == value:
-                             color==key
+                             color=key
                     
                         play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': color}     
                     else: #if this a regular card game turn
