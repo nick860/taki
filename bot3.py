@@ -90,13 +90,13 @@ def littleCards(game,idm):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect the socket to the port where the server is listening
-server_address = ('192.168.1.20', 50040)
+server_address = ('192.168.1.20', 50041)
 
 sock.connect(server_address)
 print 'connected'
 time.sleep(1)
 json_kwargs = {'default': lambda o: o.__dict__, 'sort_keys': True, 'indent': 4}
-
+start=True
 password = '1234'
 opentaki=False
 saveCard=None
@@ -113,7 +113,7 @@ try:
     print 'my id - ' ,my_id
 
     
-    takeFrom=False
+    takeFrom=True
     #   Loop Game:
     while True:
         data = sock.recv(1024)[4:]
@@ -126,24 +126,31 @@ try:
             
             if cur_turn == my_id: # my turn
                 pile = game['pile']
-                if (pile['value'] in ["+2","CHDIR","STOP"]) and saveCard!=pile:
-                    saveCard=pile
-                else:
-                    saveCard=None
+                print ";;;;6;;d;;;;;s;;;1"
                 
+                if (pile['value'] in ["+2","CHDIR","STOP"]) and saveCard!=pile and start==False:
+                    saveCard=pile
+                elif (pile['value'] in ["+2","CHDIR","STOP"]):
+                    saveCard=None
+                    
+                start=False
                 print saveCard
                 if pile['value'] == "+2": # if someone put +2
+                    print ";;;;;;;;;;;;;;1"
                     card=Exist(game,["+2"],[])
-                    if card and saveCard==None: # put the card : +2
+                    if card: # put the card : +2
                         play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
+                        takeFrom=False
                     else:
                         takeFrom=True
                 #else: # take card from the server
                    # play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card' }
 
             #if to the next player has 4- cards so try to put spacifcs card
-                card=Exist(game,["+2","STOP","CHDIR"],[pile['color']])
-                if card and takeFrom==True:
+                
+                elif Exist(game,["+2","STOP","CHDIR"],[pile['color']]) and takeFrom==True:
+                        print ";;;;;;d;;;;;;;;1"
+                        card=Exist(game,["+2","STOP","CHDIR"],[pile['color']])
                         play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                         saveCard=card
                         takeFrom=False
@@ -151,21 +158,27 @@ try:
                      #of the next player and we dont need to take +2 card
                
                 #cheking if we have a storng card we can use and if its usefull for us
-                card=Exist(game,["TAKI","+"],["ALL",pile['color']])
-                if card and takeFrom==True:
+                
+                elif Exist(game,["TAKI","+"],["ALL",pile['color']]) and takeFrom==True:
+                    print ";;;;6;;d;;;;;;;;1"
+                    card=Exist(game,["TAKI","+"],["ALL",pile['color']])
                     count=WeHave(game,card)
                     if card["value"]=="TAKI":                    
                             if count>0:
                                 play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
+                                takeFrom=False
                             elif card["value"]=="+":
                                 if count>0:
                                     play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
+                                    takeFrom=False
                                 else:
                                     takeFrom=True
                 #if we dont have a strong card or the card not usefull in our case
                 #so we may check the change color card
-                card=Exist(game,["CHCOL"],[])
-                if card and takeFrom==True:
+              
+                elif Exist(game,["CHCOL"],[]) and takeFrom==True:
+                        print ";;;;6;;d;;;;;;;;1"
+                        card=Exist(game,["CHCOL"],[])
                         yellow=colorCheck(game,"Yellow")
                         red=colorCheck(game,"red")
                         blue=colorCheck(game,"blue")
@@ -179,7 +192,10 @@ try:
                              color=key
                     
                         play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': color}     
+                        takeFrom=False
+                        
                 elif takeFrom==True: #if this a regular card game turn
+                       print "fuck" 
                        col=colorCheck(game,pile['color'])
                        print "cheking for regalir card"
                        colOfNum=colorNumCheck(game,pile)
@@ -187,30 +203,39 @@ try:
                        if pile['value']=="TAKI" and card:
                            if col==1:
                                play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': 'close taki'}
+                               takeFrom=False 
                            else:
                                opentaki=True
                                
                        elif col>colOfNum[1] and card:
                            play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
+                           takeFrom=False 
                        elif col<=colOfNum[1]:
                            card=colOfNum[0]
                            play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
+                           takeFrom=False 
                        else:
                            takeFrom=True
 
+
+                
+               
+                print play_turn
                 try:
                     print card["color"]
                     print takeFrom
                 except:
                     pass
+                
+                
                 if takeFrom==True:
                         play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card'}
-                        takeFrom=False
+                        
                 if opentaki==True:
                     if colorCheck(game,pile['color'])==1:
                         play_turn['order']='close taki'
                         opentaki=False
-                print "88888888888888888888",play_turn
+                
                 dus = json.dumps(play_turn, **json_kwargs)
                 sock.send(dus)
             
