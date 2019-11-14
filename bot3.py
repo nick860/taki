@@ -98,7 +98,7 @@ time.sleep(1)
 json_kwargs = {'default': lambda o: o.__dict__, 'sort_keys': True, 'indent': 4}
 
 password = '1234'
-
+opentaki=False
 try:
     # Send data
     # Connection setup
@@ -178,8 +178,13 @@ try:
                        col=colorCheck(game,pile['color'])
                        colOfNum=colorNumCheck(game,pile)
                        card=Exist(game,["1","2","3","4","5","6","7","8","9"],[pile['color']])
-
-                       if col>colOfNum[1] and card:
+                       if pile['value']=="TAKI" and card:
+                           if col==1:
+                               play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': 'close taki'}
+                           elif:
+                               opentaki=True
+                               
+                       elif col>colOfNum[1] and card:
                            play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
                        elif col<=colOfNum[1] and card:
                            card=colOfNum[0]
@@ -195,6 +200,10 @@ try:
                 if takeFrom==True:
                         play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card'}
                         takeFrom=False
+                if opentaki==True:
+                    if colorCheck(game,pile['color'])==1:
+                        play_turn['order']='close taki'
+                        opentaki=False
                 print "88888888888888888888",play_turn
                 dus = json.dumps(play_turn, **json_kwargs)
                 sock.send(dus)
