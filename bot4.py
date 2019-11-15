@@ -130,6 +130,7 @@ check=0
 saveOneBefore=0
 OneBefore=0
 hand=None
+stop=False
 try:
     # Send data
     # Connection setup
@@ -184,6 +185,7 @@ try:
                 if OneBefore-saveOneBefore==0 and pile['value'] == "STOP":
                     print "Stop not our"
                     saveCard=True
+                    stop = True
                     
                 elif OneBefore-saveOneBefore >=1 and pile['value'] == "+2":
                     saveCard=False
@@ -193,7 +195,11 @@ try:
                 
                 print saveCard
                 
-                if pile['value'] == "+2" and saveCard==True : # if someone put +2
+                if pile['value'] == "STOP":
+                    if stop:
+                        takeFrom = True
+                        stop = False
+                elif pile['value'] == "+2" and saveCard==True : # if someone put +2
                     print ";;;;;;;;;;;;;;1"
                     card=Exist(game,["+2"],[])
                     if card: # put the card : +2
@@ -201,6 +207,7 @@ try:
                         takeFrom=False
                     else:
                         takeFrom=True
+
                 
                 #else: # take card from the server
                    # play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card' }
