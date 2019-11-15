@@ -96,16 +96,16 @@ def TwoBeforeUs(i):
         return i-2
 
 def colorforg(colo):
-    dif={"yellow":'_Y'
-         "red":'_R'
-         "green":"_G"
-         "blue":"_B"
-         "CHDIR":">"
-         "STOP":"S"
-         "TAKI":"T"
-         "CHCOL":"cc"
-         "TAKICOLOR":"ct"
-         "+":"+"
+    dif={"yellow":"_Y",
+         "red":"_R",
+         "green":"_G",
+         "blue":"_B",
+         "CHDIR":">",
+         "STOP":"S",
+         "TAKI":"T",
+         "CHCOL":"cc",
+         "TAKICOLOR":"ct",
+         "+":"+",
          "+2":"+2"
         }
     return dif[colo] 
@@ -155,18 +155,19 @@ try:
                 break
             cur_turn = game['turn']
             cs=0
-            with open("c:\takifolder\cardfile.txt") as file2:
-                for c in hand:
-                    colorr=c["color"]
-                    value=c["value"]
-                    cs=cs+1
-                    if value in ["1","2","3","4","5","6","7","8","9"]:            
-                      file2.write(str(cs)+". "+value+colorforg(colorr)+"\n")
-                    else:
-                        if value=="TAKI" and colorr="ALL":     
-                          file2.write(str(cs)+". "+colorforg("TAKICOLOR")+"\n")
+            if hand:
+                with open(r"c:\takifolder\cardfile.txt", 'w') as file2:
+                    for c in hand:
+                        colorr=c["color"]
+                        value=c["value"]
+                        cs=cs+1
+                        if value in ["1","2","3","4","5","6","7","8","9"]:            
+                          file2.write(str(cs)+". "+value+colorforg(colorr)+"\n")
                         else:
-                          file2.write(str(cs)+". "+colorforg(value)+"\n")  
+                            if value=="TAKI" and colorr=="ALL":     
+                              file2.write(str(cs)+". "+colorforg("TAKICOLOR")+"\n")
+                            else:
+                              file2.write(str(cs)+". "+colorforg(value)+"\n")  
                     
             print cur_turn
             print game['others']
