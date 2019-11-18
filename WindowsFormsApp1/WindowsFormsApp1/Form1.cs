@@ -221,7 +221,7 @@ namespace WindowsFormsApp1
                 case 'G':
                     return "Green";
                 case 'Y':
-                    return "Blue";
+                    return "Yellow";
                 case 'R':
                     return "Red";
             }
