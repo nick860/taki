@@ -79,13 +79,29 @@ def Exist(game,Value,color):
                 return c
     return None
 
+def colorforg(colo):
+    dif={"yellow":"_Y",
+         "red":"_R",
+         "green":"_G",
+         "blue":"_B",
+         "CHDIR":">",
+         "STOP":"S",
+         "TAKI":"T",
+         "CHCOL":"cc",
+         "TAKICOLOR":"ct",
+         "+":"+",
+         "+2":"+2",
+         "ALL":""
+        }
+    return dif[colo]
+
 # -------------------------------------------------------------------------
 #   Sockets and Data
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect the socket to the port where the server is listening
-server_address = ('localhost', 50000)
+server_address = ('192.168.1.214', 50000)
 
 sock.connect(server_address)
 print 'connected'
@@ -105,6 +121,7 @@ try:
     flagTaki = False
     #   Loop Game:
     while True:
+        cs = 0
         flag = False
         data = sock.recv(1024)[4:]
         print >> sys.stderr, 'For game state "%s"' % data
@@ -115,7 +132,7 @@ try:
             cur_turn = game['turn']
             hand= game['hand']
         if hand:
-            with open("c:\takifolder\cardfile.txt") as file2:
+            with open(r"c:\takifolder\cardfile.txt", 'w') as file2:
                 for c in hand:
                     colorr=c["color"]
                     value=c["value"]
