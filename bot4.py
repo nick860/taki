@@ -96,16 +96,16 @@ def TwoBeforeUs(i):
         return i-2
 
 def colorforg(colo):
-    dif={"yellow":'_Y'
-         "red":'_R'
-         "green":"_G"
-         "blue":"_B"
-         "CHDIR":">"
-         "STOP":"S"
-         "TAKI":"T"
-         "CHCOL":"cc"
-         "TAKICOLOR":"ct"
-         "+":"+"
+    dif={"yellow":'_Y',
+         "red": '_R',
+         "green":"_G",
+         "blue":"_B",
+         "CHDIR":">",
+         "STOP":"S",
+         "TAKI":"T",
+         "CHCOL":"cc",
+         "TAKICOLOR":"ct",
+         "+":"+",
          "+2":"+2"
         }
     return dif[colo] 
@@ -115,7 +115,7 @@ def colorforg(colo):
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect the socket to the port where the server is listening
-server_address = ('localhost', 50000)
+server_address = ('localhost', 50040)
 
 sock.connect(server_address)
 print 'connected'
@@ -155,6 +155,7 @@ try:
                 break
             cur_turn = game['turn']
             cs=0
+        if hand:
             with open("c:\takifolder\cardfile.txt") as file2:
                 for c in hand:
                     colorr=c["color"]
@@ -163,10 +164,10 @@ try:
                     if value in ["1","2","3","4","5","6","7","8","9"]:            
                       file2.write(str(cs)+". "+value+colorforg(colorr)+"\n")
                     else:
-                        if value=="TAKI" and colorr="ALL":     
+                        if value=="TAKI" and colorr=="ALL":     
                           file2.write(str(cs)+". "+colorforg("TAKICOLOR")+"\n")
                         else:
-                          file2.write(str(cs)+". "+colorforg(value)+"\n")  
+                          file2.write(str(cs)+". "+colorforg(value)+colorforg(colorr)+"\n")  
                     
             print cur_turn
             print game['others']
