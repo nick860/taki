@@ -1,0 +1,157 @@
+#   Imports
+import socket
+import sys
+import time
+import json
+import random
+import re
+
+
+
+def help4(game,card):
+    hand = game['hand']
+    pile = game['pile']
+    pile_color = game['pile_color']
+    for c in hand:
+        if c['color'] == pile_color:
+            return c
+        if c['value'] == pile['value']:
+            return c
+
+
+        
+def help3(game):
+    hand = game['hand']
+    green = 0
+    blue = 0
+    yellow = 0
+    red = 0
+    for c in hand:
+        if c['color'] == "green":
+            green+=1
+        elif c['color'] == "yellow":
+            green+=1
+        elif c['color'] == "blue":
+            green+=1
+        elif c['color'] == "red":
+            green+=1
+            
+    if green > blue and green > yellow and green > red:
+        return "green"
+    elif blue > green and blue > yellow and blue > red:
+        return "blue"
+    elif red > green and red > yellow and red > blue:
+        return "red"
+    else:
+        return "yellow"
+    
+    
+    
+    
+
+
+def help2(game):
+    hand = game['hand']
+    pile = game['pile']
+    pile_color = game['pile_color']
+    for c in hand:
+        if c['color'] == pile_color:
+            return c
+        if c['value'] == pile['value']:
+            return c
+    for c in hand:
+        if c['value'] == "TAKI":
+            return c
+        if c['value'] == "CHCOL":
+            return c
+
+def Exist(game,Value,color):
+    hand=game['hand']
+    flag=len(color)
+    for c in hand:
+        if flag==0:
+            if c['value'] in Value:#we dont care about the color
+                print c
+                return c
+        else:
+            if (c['value'] in Value) and (c['color'] in color):
+                print c
+                return c
+    return None
+
+# -------------------------------------------------------------------------
+#   Sockets and Data
+# Create a TCP/IP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Connect the socket to the port where the server is listening
+server_address = ('localhost', 50000)
+
+sock.connect(server_address)
+print 'connected'
+time.sleep(1)
+password = '1234'
+json_kwargs = {'default': lambda o: o.__dict__, 'sort_keys': True, 'indent': 4}
+
+try:
+    sock.send(password)
+
+    data = sock.recv(1024)[4:]
+    print data
+
+    data = sock.recv(1024)[4:]
+    my_id = int(re.findall('[0-9]', data)[0])
+    print 'my id - ' ,my_id
+    flagTaki = False
+    #   Loop Game:
+    while True:
+        flag = False
+        data = sock.recv(1024)[4:]
+        print >> sys.stderr, 'For game state "%s"' % data
+        if "error" not in data:   
+            game = json.loads(data)
+            if 'error' in game: 
+                break
+            cur_turn = game['turn']  
+            if cur_turn == my_id:
+                pile = game['pile']
+                # + 2
+                if pile['value'] == "+2":
+                    card=Exist(game,["+2"],[])
+                    if card: # put the card : +2
+                        play_turn = {'card': {"color": (str)(card["color"]), "value": (str)(card["value"])}, 'order': ''}
+                        flag = True
+                else:
+                    card = help2(game)
+                    if card:
+                        if flagTaki == True:
+                            play_turn = {'card': card, 'order': 'close taki'}
+                            flagTaki = False
+                            
+                        if card['value'] == "CHCOL":
+                            newcolor = help3(game)
+                            play_turn = {'card': card, 'order': newcolor}
+                            flag = True
+                        elif card['value'] == "TAKI":
+                            play_turn = {'card': card, 'order': ''}
+                            flag = True
+                            flagTaki = True
+                        else:
+                            play_turn = {'card': card, 'order': ''}
+                            flag = True
+                        
+                
+
+
+                if flag == False:
+                    play_turn = {'card': {"color": "", "value": ""}, 'order': 'draw card'}
+
+                print play_turn
+                dus = json.dumps(play_turn, **json_kwargs)
+                sock.send(dus)
+            time.sleep(1)
+    
+finally:
+    print 'closing socket'
+    sock.close()
+
