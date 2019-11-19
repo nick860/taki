@@ -96,17 +96,17 @@ json_kwargs = {'default': lambda o: o.__dict__, 'sort_keys': True, 'indent': 4}
 try:
     sock.send(password)
 
-    data = sock.recv(1024)[4:]
+    data = sock.recv(4096)[4:]
     print data
 
-    data = sock.recv(1024)[4:]
+    data = sock.recv(4096)[4:]
     my_id = int(re.findall('[0-9]', data)[0])
     print 'my id - ' ,my_id
     flagTaki = False
     #   Loop Game:
     while True:
         flag = False
-        data = sock.recv(1024)[4:]
+        data = sock.recv(4096)[4:]
         print >> sys.stderr, 'For game state "%s"' % data
         if "error" not in data:   
             game = json.loads(data)
